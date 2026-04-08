@@ -1,0 +1,138 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+enum Role {
+    ADMIN
+    STAFF
+    DONOR
+}
+
+enum Position {
+    DOCTOR
+    LAB_TECHNICIAN
+    NURSE
+    RECEPTIONIST
+}
+
+enum BloodGroup {
+    A_POS
+    A_NEG
+    B_POS
+    B_NEG
+    O_POS
+    O_NEG
+    AB_POS
+    AB_NEG
+}
+
+enum CurrentStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    COMPLETED
+}
+
+// user model => admin/staff/donor
+model User {
+    id         String     @id @default(uuid())
+    name       String
+    email      String     @unique
+    phone      String     @unique
+    password   String
+    address    String
+    dob        DateTime
+    bloodGroup BloodGroup
+
+    role     Role
+    position Position? // only for staff
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // relations
+    donations       Donation[]        @relation("DonorDonations")
+    handledRequests BloodRequest[]    @relation("HandledBy")
+    testedDonations Donation[]        @relation("TestedDonations")
+    testReports     BloodTestReport[] @relation("TestedReports")
+    notifications   Notification[]
+}
+
+// Blood Donation => Donor give blood
+model Donation {
+    id           String        @id @default(uuid())
+    quantity     Int // in pint
+    donationDate DateTime      @default(now())
+    status       CurrentStatus @default(PENDING)
+    bloodGroup   BloodGroup
+
+    createdAt DateTime @default(now())
+
+    donorId    String
+    testedById String?
+
+    // relation
+    donor       User             @relation("DonorDonations", fields: [donorId], references: [id])
+    testedBy    User?            @relation("TestedDonations", fields: [testedById], references: [id])
+    testReports BloodTestReport? @relation("DonationReport")
+}
+
+// Blood Inventory => Blood stock in bank
+model BloodInventory {
+    id         String     @id @default(uuid())
+    bloodGroup BloodGroup @unique
+    quantity   Int // Total pint available
+    updatedAt  DateTime   @updatedAt
+}
+
+// Blood request => Hospital/Patient request
+model BloodRequest {
+    id            String        @id @default(uuid())
+    requesterName String
+    hospitalName  String?
+    phone         String
+    bloodGroup    BloodGroup
+    quantity      Int
+    status        CurrentStatus @default(PENDING)
+
+    requestDate DateTime @default(now())
+
+    handledById String?
+
+    // relation
+    handledBy User? @relation("HandledBy", fields: [handledById], references: [id])
+}
+
+model BloodTestReport {
+    id            String  @id @default(uuid())
+    hemoglobin    Float?
+    bloodPressure String?
+    diseaseNotes  String?
+
+    createdAt DateTime @default(now())
+
+    donationId String @unique
+    testedById String
+
+    // relation
+    donation Donation @relation("DonationReport", fields: [donationId], references: [id])
+    testedBy User     @relation("TestedReports", fields: [testedById], references: [id])
+}
+
+model Notification {
+    id      String  @id @default(uuid())
+    message String
+    isRead  Boolean @default(false)
+
+    createdAt DateTime @default(now())
+
+    userId String
+
+    // relation
+    user User @relation(fields: [userId], references: [id])
+}
