@@ -1,20 +1,39 @@
 import { ApiError } from "../utils/ApiError.js";
+import { prisma } from "../utils/prisma.js";
+import bcrypt from "bcryptjs";
 
-let users = [
-    { id: 1, name: "Rupesh Choudhary", profession: "Coding" },
-    { id: 2, name: "Ram Rajbanshi", profession: "Designer" },
-    { id: 3, name: "Henry Roy", profession: "Sellsman" },
-];
+const safeUserSelect = {
+    id: true,
+    name: true,
+    email: true,
+    phone: true,
+    address: true,
+    dob: true,
+    bloodGroup: true,
+    role: true,
+    position: true,
+    createdAt: true,
+};
 
 // GET ALL USERS
-export const getAllUser = async () => {
+export const getAllUsers = async () => {
+    const users = await prisma.user.findMany({
+        orderBy: { createdAt: "desc" },
+        select: {
+            ...safeUserSelect,
+            updatedAt: true,
+        },
+    });
+
     return users;
 };
 
 // GET USER BY ID
-export const getUser = async (id) => {
-    const user = users.find((t) => t.id === id);
-
+export const getUserById = async (id) => {
+    const user = await prisma.user.findUnique({
+        where: { id },
+        select: safeUserSelect,
+    });
     if (!user) {
         throw new ApiError(404, "User not found");
     }
@@ -22,54 +41,95 @@ export const getUser = async (id) => {
     return user;
 };
 
-// CREATE USER
+// CREATE/REGISTER USER
 export const createUser = async (data) => {
-    const { name, profession } = data;
-    if (!name || name.trim() === "") {
-        throw new ApiError(404, "Name is required");
-    }
-
-    if (!profession || profession.trim() === "") {
-        throw new ApiError(404, "Profession is required");
-    }
-
-    const newUser = {
-        id: users.length + 1,
+    const {
         name,
-        profession,
-    };
+        email,
+        phone,
+        password,
+        address,
+        dob,
+        bloodGroup,
+        role,
+        position,
+    } = data;
 
-    users.push(newUser);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    return newUser;
+    try {
+        const newUser = await prisma.user.create({
+            data: {
+                name,
+                email,
+                phone,
+                password: hashedPassword,
+                address,
+                dob,
+                bloodGroup,
+                role,
+                position: role === "STAFF" ? position : null,
+            },
+            select: safeUserSelect,
+        });
+
+        return newUser;
+    } catch (error) {
+        console.log("Prism Error:", error);
+
+        if (error.code === "P2002") {
+            throw new ApiError(409, "Email or phone already exists");
+        }
+        throw new ApiError(500, "User registration failed");
+    }
 };
 
 // UPDATE USER
 export const updateUser = async (id, data) => {
-    const user = users.find((t) => t.id === id);
+    const existingUser = await prisma.user.findUnique({
+        where: { id },
+    });
 
-    if (!user) {
+    if (!existingUser) {
         throw new ApiError(404, "User not found");
     }
 
-    if (data.name !== undefined) {
-        user.name = data.name;
-    }
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { id },
+            data,
+            select: safeUserSelect,
+        });
 
-    if (data.profession !== undefined) {
-        user.profession = data.profession;
-    }
+        return updatedUser;
+    } catch (error) {
+        console.log("Prism Error:", error);
 
-    return user;
+        if (error.code === "P2002") {
+            throw new ApiError(409, "Email or phone already exists");
+        }
+        throw new ApiError(500, "User update failed");
+    }
 };
 
 // DELETE USER
 export const deleteUser = async (id) => {
-    const index = users.findIndex((t) => t.id === id);
+    const existingUser = await prisma.user.findUnique({
+        where: { id },
+    });
 
-    if (index === -1) {
+    if (!existingUser) {
         throw new ApiError(404, "User not found");
     }
 
-    return users.splice(index, 1)[0];
+    try {
+        await prisma.user.delete({
+            where: { id },
+        });
+
+        return true;
+    } catch (error) {
+        console.log("Prism Error:", error);
+        throw new ApiError(500, "User update failed");
+    }
 };
