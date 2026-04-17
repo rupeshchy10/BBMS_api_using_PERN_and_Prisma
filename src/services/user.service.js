@@ -13,16 +13,14 @@ const safeUserSelect = {
     role: true,
     position: true,
     createdAt: true,
+    updatedAt: true,
 };
 
 // GET ALL USERS
 export const getAllUsers = async () => {
     const users = await prisma.user.findMany({
         orderBy: { createdAt: "desc" },
-        select: {
-            ...safeUserSelect,
-            updatedAt: true,
-        },
+        select: safeUserSelect,
     });
 
     return users;

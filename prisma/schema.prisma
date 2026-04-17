@@ -38,6 +38,11 @@ enum CurrentStatus {
     COMPLETED
 }
 
+enum ReportStatus {
+    PENDING
+    REJECTED
+}
+
 // user model => admin/staff/donor
 model User {
     id         String     @id @default(uuid())
@@ -61,6 +66,7 @@ model User {
     testedDonations Donation[]        @relation("TestedDonations")
     testReports     BloodTestReport[] @relation("TestedReports")
     notifications   Notification[]
+    notify BloodRequest[] @relation("Notify")
 }
 
 // Blood Donation => Donor give blood
@@ -103,16 +109,19 @@ model BloodRequest {
     requestDate DateTime @default(now())
 
     handledById String?
+    userId String?
 
     // relation
     handledBy User? @relation("HandledBy", fields: [handledById], references: [id])
+    user User? @relation("Notify",fields: [userId], references: [id])
 }
 
 model BloodTestReport {
-    id            String  @id @default(uuid())
+    id            String       @id @default(uuid())
     hemoglobin    Float?
     bloodPressure String?
     diseaseNotes  String?
+    status        ReportStatus
 
     createdAt DateTime @default(now())
 
