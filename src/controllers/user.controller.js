@@ -6,6 +6,7 @@ import { generateToken } from "../utils/generateToken.js";
 import {
     registerSchema,
     updateUserSchema,
+    loginSchema,
 } from "../validators/user.validator.js";
 
 // GET ALL USERS
@@ -87,5 +88,29 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
     res.status(200).json(
         new ApiResponse(200, null, "User deleted successfully")
+    );
+});
+
+// LOGIN USER
+export const loginUser = asyncHandler(async (req, res) => {
+    const parsedData = loginSchema.safeParse(req.body);
+
+    if (!parsedData.success) {
+        const errors = parsedData.error.issues.map((e) => ({
+            field: e.path[0],
+            message: e.message,
+        }));
+        throw new ApiError(400, "Validation failed", errors);
+    }
+
+    const user = await userService.loginUser(
+        parsedData.data.email,
+        parsedData.data.password
+    );
+
+    const token = generateToken(user.id, res);
+
+    res.status(200).json(
+        new ApiResponse(200, { user: user, token }, "Login successful")
     );
 });
