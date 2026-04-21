@@ -176,6 +176,37 @@ npx prisma generate
 npm run dev
 ```
 
+## 📌 API Endpoints
+
+### 👤 User
+- POST /api/users/register
+- POST /api/users/login
+- GET /api/users
+- GET /api/users/:id
+- PATCH /api/users/:id
+- DELETE /api/users/:id
+
+### 🩸 Donation
+- POST /api/donations
+- GET /api/donations
+- PATCH /api/donations/:id/status
+
+### 🧪 Test Report
+- POST /api/reports
+
+### 🏥 Blood Request
+- POST /api/requests
+- GET /api/requests
+- PATCH /api/requests/:id/status
+
+### 📦 Inventory
+- GET /api/inventory
+- GET /api/inventory/:bloodGroup
+
+### 🔔 Notifications
+- GET /api/notifications
+- PATCH /api/notifications/:id/read
+
 ---
 
 # 🔐 Future Improvements

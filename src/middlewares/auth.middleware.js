@@ -49,3 +49,17 @@ export const authMiddleware = asyncHandler(async (req, res, next) => {
 
     next();
 });
+
+export const authorizeRoles = (...roles) => {
+    return (req, res, next) => {
+        if (!req.user) {
+            throw new ApiError(401, "Unauthorized");
+        }
+
+        if (!roles.includes(req.user.role)) {
+            new ApiError(403, "Forbidden");
+        }
+
+        next();
+    };
+};
