@@ -8,7 +8,7 @@ import { authMiddleware, authorizeRoles } from "../middlewares/auth.middleware.j
 
 const router = express.Router();
 
-router.post("/", createRequest);
+router.post("/",authMiddleware, createRequest);
 
 router.get(
     "/",

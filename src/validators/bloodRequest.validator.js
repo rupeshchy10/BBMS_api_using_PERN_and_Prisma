@@ -18,7 +18,7 @@ const createRequestSchema = z.object({
 });
 
 const updateRequestStatusSchema = z.object({
-    status: z.enum(["APPROVED", "REJECTED"]),
+    status: z.enum(["APPROVED", "PENDING", "REJECTED"]),
 });
 
 export { createRequestSchema, updateRequestStatusSchema };

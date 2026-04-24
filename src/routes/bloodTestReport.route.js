@@ -1,6 +1,6 @@
 import express from "express";
-import { authMiddleware, authorizeRoles } from "../middlewares/auth.middleware";
-import { createReport } from "../controllers/bloodTestReport.controller";
+import { authMiddleware, authorizeRoles } from "../middlewares/auth.middleware.js";
+import { createReport } from "../controllers/bloodTestReport.controller.js";
 
 const router = express.Router();
 

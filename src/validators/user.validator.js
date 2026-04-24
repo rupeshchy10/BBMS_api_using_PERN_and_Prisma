@@ -38,7 +38,6 @@ const baseUserSchema = z.object({
     role: z.enum(["ADMIN", "STAFF", "DONOR"]).default("DONOR"),
     position: z
         .enum(["DOCTOR", "LAB_TECHNICIAN", "NURSE", "RECEPTIONIST"])
-        .optional(),
 });
 
 // REGISTER SCHEMA (ALL REQUIRED)

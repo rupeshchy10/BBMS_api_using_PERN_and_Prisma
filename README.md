@@ -1,6 +1,7 @@
 # 🩸 Blood Bank Management System (BBMS) — Backend
 
-A **Blood Bank Management System (BBMS)** backend built using the **PERN stack** (PostgreSQL, Express.js, React, Node.js).  
+A **Blood Bank Management System (BBMS)** backend built using the **PERN stack** (PostgreSQL, Express.js, React, Node.js) and Prisma ORM.
+
 This system manages blood donations, blood inventory, and blood requests with a **role-based access control system** for Admin, Staff, and Donor.
 
 The project follows **industry-level backend architecture** with Prisma ORM and PostgreSQL.
@@ -12,18 +13,21 @@ The project follows **industry-level backend architecture** with Prisma ORM and 
 ## 👤 Role-Based Access Control (RBAC)
 
 ### **Admin**
+
 - Manage users
 - Manage blood inventory
 - Approve/reject blood requests
 - Monitor system
 
 ### **Staff**
+
 - Blood testing
 - Handle blood requests
 - Update donation status
-- Positions: Doctor, Lab Technician and Nurse
+- Positions: Doctor, Lab Technician, Nurse and Receptionist
 
 ### **Donor**
+
 - Register/login
 - Donate blood
 - View donation history
@@ -65,13 +69,13 @@ The project follows **industry-level backend architecture** with Prisma ORM and 
 
 # 🏗️ Tech Stack
 
-- **Backend:** Node.js, Express.js  
-- **Database:** PostgreSQL  
-- **ORM:** Prisma  
-- **Authentication:** JWT  
-- **Architecture:** REST API  
+- **Backend:** Node.js, Express.js
+- **Database:** PostgreSQL
+- **ORM:** Prisma
+- **Authentication:** JWT
+- **Architecture:** REST API
 - **Pattern:** Role-Based Access Control (RBAC)
-- **Neon** 
+- **Neon**
 
 ---
 
@@ -95,8 +99,8 @@ The system follows a normalized relational database structure.
 ## Enums
 
 - Role → ADMIN, STAFF, DONOR
-- Position → DOCTOR, LAB_TECHNICIAN, NURSE.
-- BloodGroup → A_POS, B_POS, O_POS, etc.
+- Position → DOCTOR, LAB_TECHNICIAN, NURSE, RECEPTIONIST.
+- BloodGroup → A_POS, B_POS, O_POS, ... etc.
 - RequestStatus → PENDING, APPROVED, REJECTED, COMPLETED
 - DonationStatus → PENDING, APPROVED, REJECTED, COMPLETED
 
@@ -105,24 +109,29 @@ The system follows a normalized relational database structure.
 ## Core Models
 
 ### **User**
+
 - Stores admin, staff, and donor information.
 
 ### **Donation**
+
 - Tracks donor blood donations.
 
 ### **BloodInventory**
+
 - Stores available blood stock.
 
 ### **BloodRequest**
+
 - Handles blood requests.
 
 ### **BloodTestReport**
+
 - Stores test results for donated blood.
 
 ### **Notification**
+
 - Stores system notifications.
 
----
 ---
 
 # ⚙️ Installation & Setup
@@ -179,33 +188,39 @@ npm run dev
 ## 📌 API Endpoints
 
 ### 👤 User
-- POST /api/users/register
-- POST /api/users/login
-- GET /api/users
-- GET /api/users/:id
-- PATCH /api/users/:id
-- DELETE /api/users/:id
+
+- POST /api/v1/users/register
+- POST /api/v1/users/login
+- GET /api/v1/users
+- GET /api/v1/users/:id
+- PUT /api/v1/users/:id
+- DELETE /api/v1/users/:id
 
 ### 🩸 Donation
-- POST /api/donations
-- GET /api/donations
-- PATCH /api/donations/:id/status
+
+- POST /api/v1/donations
+- GET /api/v1/donations
+- PATCH /api/v1/donations/:id/status
 
 ### 🧪 Test Report
-- POST /api/reports
+
+- POST /api/v1/reports
 
 ### 🏥 Blood Request
-- POST /api/requests
-- GET /api/requests
-- PATCH /api/requests/:id/status
+
+- POST /api/v1/requests
+- GET /api/v1/requests
+- PATCH /api/v1/requests/:id/status
 
 ### 📦 Inventory
-- GET /api/inventory
-- GET /api/inventory/:bloodGroup
+
+- GET /api/v1/inventory
+- GET /api/v1/inventory/:bloodGroup
 
 ### 🔔 Notifications
-- GET /api/notifications
-- PATCH /api/notifications/:id/read
+
+- GET /api/v1/notifications
+- PATCH /api/v1/notifications/:id/read
 
 ---
 
@@ -217,8 +232,8 @@ npm run dev
 - Appointment booking system
 - Hospital management module
 - Audit logging
-- API documentation (Swagger)
 - Docker deployment
+- Donor's Certificate generation
 
 ---
 
@@ -239,5 +254,6 @@ This project demonstrates:
 
 Rupesh Choudhary  
 Computer Engineering Student — Backend Developer
-* 💼 Portfolio: *https://portfolio-using-react-and-tailwind-orcin.vercel.app/*
-* 🐙 GitHub: *https://github.com/rupeshchy10*
+
+- 💼 Portfolio: *https://portfolio-using-react-and-tailwind-orcin.vercel.app/*
+- 🐙 GitHub: *https://github.com/rupeshchy10*

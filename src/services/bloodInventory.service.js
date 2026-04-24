@@ -1,5 +1,5 @@
 import { ApiError } from "../utils/ApiError.js";
-import prisma from "../utils/prisma.js";
+import { prisma } from "../utils/prisma.js";
 
 // GET ALL INVENTORY
 export const getAllInventory = async () => {

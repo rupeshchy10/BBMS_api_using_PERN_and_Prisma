@@ -132,10 +132,10 @@ export const deleteUser = async (id) => {
     }
 };
 
+// USER LOGIN
 export const loginUser = async (email, password) => {
     const user = await prisma.user.findUnique({
         where: { email },
-        select:safeUserSelect
     });
 
     if (!user) {

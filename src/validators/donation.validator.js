@@ -12,6 +12,9 @@ const createDonationSchema = z.object({
         "AB_POS",
         "AB_NEG",
     ]),
+    status: z
+        .enum(["APPROVED", "PENDING", "REJECTED", "COMPLETED"])
+        .default("PENDING"),
 });
 
 export { createDonationSchema };

@@ -16,8 +16,8 @@ export const createReport = async (staffId, data) => {
         throw new ApiError(404, "Donation not found");
     }
 
-     if(donation.status!=="PENDING"){
-        throw new ApiError(400,"Donation already processed")
+    if (donation.status !== "PENDING") {
+        throw new ApiError(400, "Donation already processed");
     }
 
     // 2. Prevent duplicate report
@@ -64,14 +64,17 @@ export const createReport = async (staffId, data) => {
     }
 
     // NOTIFICATION TRIGGERED FROM BLOODTESTREPORT
-    if(status==="APPROVED"){
-        await createNotification(donation.donorId,"Your blood donation has been approved")
-    } else{
+    if (status === "APPROVED") {
         await createNotification(
-            donation.donorId, "Your blood donation has been rejected"
-        )
+            donation.donorId,
+            "Your blood donation has been approved"
+        );
+    } else {
+        await createNotification(
+            donation.donorId,
+            "Your blood donation has been rejected"
+        );
     }
-
 
     return report;
 };

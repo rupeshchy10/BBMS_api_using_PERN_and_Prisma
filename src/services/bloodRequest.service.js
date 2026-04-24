@@ -3,9 +3,12 @@ import { prisma } from "../utils/prisma.js";
 import { createNotification } from "./notification.service.js";
 
 // CREATE REQUEST
-export const createRequest = async (data) => {
+export const createRequest = async (userId, data) => {
     return await prisma.bloodRequest.create({
-        data,
+        data: {
+            ...data,
+            requesterId: userId,
+        },
     });
 };
 
@@ -50,15 +53,12 @@ export const updateRequestStatus = async (id, status, staffId) => {
     }
 
     // NOTIFICATION TRIGGERED
-    if (status === "APPROVED") {
+    if (request.requesterId) {
         await createNotification(
-            request.handledById,
-            "Your blood request has been approved"
-        );
-    } else {
-        await createNotification(
-            request.handledById,
-            "Your blood request has been rejected"
+            request.requesterId,
+            status === "APPROVED"
+                ? "Your blood request has been approved"
+                : "Your blood request has been rejected"
         );
     }
 

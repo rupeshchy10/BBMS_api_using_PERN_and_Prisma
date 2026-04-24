@@ -1,10 +1,10 @@
 import express from "express";
 import userRoutes from "./routes/user.route.js";
-import donationRoutes from "./routes/user.route.js";
-import reportRoutes from "./routes/user.route.js";
-import requestRoutes from "./routes/user.route.js";
-import inventoryRoutes from "./routes/user.route.js";
-import notificationRoutes from "./routes/user.route.js";
+import donationRoutes from "./routes/donation.route.js";
+import reportRoutes from "./routes/bloodTestReport.route.js";
+import requestRoutes from "./routes/bloodRequest.route.js";
+import inventoryRoutes from "./routes/bloodInventory.route.js";
+import notificationRoutes from "./routes/notification.route.js";
 
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import { ApiError } from "./utils/ApiError.js";
