@@ -66,7 +66,7 @@ model User {
     testedDonations Donation[]        @relation("TestedDonations")
     testReports     BloodTestReport[] @relation("TestedReports")
     notifications   Notification[]
-    bloodRequests          BloodRequest[]    @relation("UserRequests")
+    bloodRequests   BloodRequest[]    @relation("UserRequests")
 }
 
 // Blood Donation => Donor give blood
@@ -112,7 +112,7 @@ model BloodRequest {
     requesterId String?
 
     // relation
-    handledBy User? @relation("HandledBy", fields: [handledById], references: [id])
+    handledBy   User? @relation("HandledBy", fields: [handledById], references: [id])
     requestedBy User? @relation("UserRequests", fields: [requesterId], references: [id])
 }
 
