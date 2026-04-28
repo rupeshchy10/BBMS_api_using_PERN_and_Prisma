@@ -56,7 +56,7 @@ const router = express.Router();
  *                              example: 2000-01-24
  *                          bloodGroup:
  *                              type: string
- *                              example: B+
+ *                              example: B_POS
  *                          role:
  *                              type: string
  *                              example: DONOR

@@ -20,8 +20,10 @@ app.use(express.urlencoded({ extended: true, limit: "20kb" }));
 // STATIC FILES
 app.use(express.static("public"));
 
-// TEST ROUTE
-app.get("/", (req, res) => res.send("Welcome to my BBMS project"));
+// HOME ROUTE
+app.get("/", (req, res) => {
+    res.redirect("/api-docs");
+});
 
 // API ROUTES
 app.use("/api/v1/users", userRoutes);

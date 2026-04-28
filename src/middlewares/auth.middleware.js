@@ -57,9 +57,8 @@ export const authorizeRoles = (...roles) => {
         }
 
         if (!roles.includes(req.user.role)) {
-            new ApiError(403, "Forbidden");
+           throw new ApiError(403, "Forbidden");
         }
-
         next();
     };
 };

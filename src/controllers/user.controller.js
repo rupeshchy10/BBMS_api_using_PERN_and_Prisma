@@ -117,10 +117,11 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 // LOGOUT USER
 export const logout = asyncHandler(async (req, res) => {
-    res.cookie("jwt", "", {
+    res.clearCookie("jwt", {
         httpOnly: true,
-        expires: new Date(0),
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
     });
 
-    res.status(200).json(ApiResponse(200, null, "Logged out successfully"));
+    res.status(200).json(new ApiResponse(200, null, "Logged out successfully"));
 });

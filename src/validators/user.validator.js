@@ -38,10 +38,24 @@ const baseUserSchema = z.object({
     role: z.enum(["ADMIN", "STAFF", "DONOR"]).default("DONOR"),
     position: z
         .enum(["DOCTOR", "LAB_TECHNICIAN", "NURSE", "RECEPTIONIST"])
+        .optional()
+        .nullable(),
 });
 
 // REGISTER SCHEMA (ALL REQUIRED)
-const registerSchema = baseUserSchema;
+const registerSchema = baseUserSchema.refine(
+    (data) => {
+        if (data.role === "STAFF") {
+            return !!data.position;
+        }
+
+        return !data.position;
+    },
+    {
+        message: "Position is required only for STAFF",
+        path: ["position"],
+    }
+);
 
 const loginSchema = z.object({
     email: z.string().trim().toLowerCase().pipe(z.email()),
@@ -58,8 +72,10 @@ const updateUserSchema = baseUserSchema
 
 // CHANGE PASSWORD SCHEMA (SEPARATE API)
 const changePasswordSchema = z.object({
-    oldPassword: z.string().min(1,{message:"Old password is required"}),
-    newPassword: z.string().min(6,{message:"New password must be at least 6 characters"})
-})
+    oldPassword: z.string().min(1, { message: "Old password is required" }),
+    newPassword: z
+        .string()
+        .min(6, { message: "New password must be at least 6 characters" }),
+});
 
-export { registerSchema, loginSchema,updateUserSchema,changePasswordSchema };
+export { registerSchema, loginSchema, updateUserSchema, changePasswordSchema };
