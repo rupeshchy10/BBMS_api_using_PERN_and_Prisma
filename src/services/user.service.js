@@ -128,7 +128,7 @@ export const deleteUser = async (id) => {
         return true;
     } catch (error) {
         console.log("Prism Error:", error);
-        throw new ApiError(500, "User update failed");
+        throw new ApiError(500, "User deletion failed");
     }
 };
 
